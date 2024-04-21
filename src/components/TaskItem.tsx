@@ -1,6 +1,8 @@
+import { useAtom } from "jotai";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 import { DraggableProvided } from "react-beautiful-dnd";
 import { tw } from "../lib/utils/tw";
+import { isOpenMoreAtom } from "../store";
 
 type TaskItemProps = DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
@@ -12,6 +14,8 @@ type TaskItemProps = DetailedHTMLProps<
 };
 
 export default function TaskItem({ provided, name, progress }: TaskItemProps) {
+  const [isOpenMore] = useAtom(isOpenMoreAtom);
+
   return (
     <>
       <div
@@ -45,14 +49,16 @@ export default function TaskItem({ provided, name, progress }: TaskItemProps) {
           </button>
         </div>
       </div>
-      <div className="fixed top-0 drop-shadow-lg rounded-lg p-4">
-        <ul className="flex flex-col justify-center items-center space-y-5">
-          <li className="flex justify-center items-center w-fit space-x-4">
-            <img src="" alt="move right" />
-            <span>Move Right</span>
-          </li>
-        </ul>
-      </div>
+      {isOpenMore ? (
+        <div className="fixed top-0 drop-shadow-lg rounded-lg p-4">
+          <ul className="flex flex-col justify-center items-center space-y-5">
+            <li className="flex justify-center items-center w-fit space-x-4">
+              <img src="" alt="move right" />
+              <span>Move Right</span>
+            </li>
+          </ul>
+        </div>
+      ) : null}
     </>
   );
 }
