@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Rakamin Product Engineer Test</h1>
+      <h1>Product Engineer(Frontend) Test</h1>
     </div>
   );
 }
