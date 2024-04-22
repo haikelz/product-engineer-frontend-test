@@ -6,6 +6,7 @@ import {
   isOpenDeleteModalAtom,
   isOpenEditTaskModalAtom,
   isOpenMoreIdAtom,
+  moreIdAtom,
 } from "../store";
 
 type TaskItemProps = DetailedHTMLProps<
@@ -38,12 +39,14 @@ export default function TaskItem({
   name,
   progress,
 }: TaskItemProps) {
+  const [moreId, setMoreId] = useAtom(moreIdAtom);
   const [isOpenMoreId, setIsOpenMoreId] = useAtom(isOpenMoreIdAtom);
+
   const setIsOpenDeleteModal = useSetAtom(isOpenDeleteModalAtom);
   const setIsOpenEditTaskModal = useSetAtom(isOpenEditTaskModalAtom);
 
   return (
-    <>
+    <div className="relative">
       <div
         {...provided.dragHandleProps}
         {...provided.draggableProps}
@@ -70,13 +73,19 @@ export default function TaskItem({
               <span className="text-xs text-[#757575]">{progress}</span>
             )}
           </div>
-          <button type="button" onClick={() => setIsOpenMoreId(id as string)}>
+          <button
+            type="button"
+            onClick={() => {
+              setMoreId(id as string);
+              setIsOpenMoreId(!isOpenMoreId);
+            }}
+          >
             <img src="/images/more.svg" alt="more" />
           </button>
         </div>
       </div>
-      {isOpenMoreId === id ? (
-        <div className="fixed bg-white top-0 drop-shadow-lg rounded-lg p-4">
+      {moreId === id && isOpenMoreId ? (
+        <div className="absolute bg-white top-28 z-50 -right-36 drop-shadow-lg rounded-lg p-4">
           <ul className="flex flex-col justify-center items-start space-y-5">
             {menuList.map((item, index) => (
               <li key={index + 1}>
@@ -99,6 +108,6 @@ export default function TaskItem({
           </ul>
         </div>
       ) : null}
-    </>
+    </div>
   );
 }

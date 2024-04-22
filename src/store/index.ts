@@ -62,7 +62,9 @@ const data = [
 ];
 
 export const dataAtom = atom<DataProps[]>(data);
-export const isOpenMoreIdAtom = atom<string>("");
+export const moreIdAtom = atom<string>("");
+export const isOpenMoreIdAtom = atom<boolean>(false);
+
 export const isOpenCreateTaskModalAtom = atom<boolean>(false);
 export const isOpenEditTaskModalAtom = atom<boolean>(false);
 export const isOpenAddNewGroupModalAtom = atom<boolean>(false);
