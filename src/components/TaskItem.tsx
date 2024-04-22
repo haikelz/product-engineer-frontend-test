@@ -1,8 +1,12 @@
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 import { DraggableProvided } from "react-beautiful-dnd";
-import { tw } from "../lib/utils/tw";
-import { isOpenMoreIdAtom } from "../store";
+import { tw } from "~/lib/utils/tw";
+import {
+  isOpenDeleteModalAtom,
+  isOpenEditTaskModalAtom,
+  isOpenMoreIdAtom,
+} from "../store";
 
 type TaskItemProps = DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
@@ -35,6 +39,8 @@ export default function TaskItem({
   progress,
 }: TaskItemProps) {
   const [isOpenMoreId, setIsOpenMoreId] = useAtom(isOpenMoreIdAtom);
+  const setIsOpenDeleteModal = useSetAtom(isOpenDeleteModalAtom);
+  const setIsOpenEditTaskModal = useSetAtom(isOpenEditTaskModalAtom);
 
   return (
     <>
@@ -72,10 +78,22 @@ export default function TaskItem({
       {isOpenMoreId === id ? (
         <div className="fixed bg-white top-0 drop-shadow-lg rounded-lg p-4">
           <ul className="flex flex-col justify-center items-start space-y-5">
-            {menuList.map((item) => (
-              <li className="flex justify-center items-center w-fit">
-                <img src={item.image} alt={item.name} />
-                <span>{item.name}</span>
+            {menuList.map((item, index) => (
+              <li key={index + 1}>
+                <button
+                  type="button"
+                  className="flex justify-center items-center space-x-2"
+                  onClick={() =>
+                    item.name === "Delete"
+                      ? setIsOpenDeleteModal(true)
+                      : item.name === "Edit"
+                      ? setIsOpenEditTaskModal(true)
+                      : null
+                  }
+                >
+                  <img src={item.image} alt={item.name} />
+                  <span>{item.name}</span>
+                </button>
               </li>
             ))}
           </ul>
