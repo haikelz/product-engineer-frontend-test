@@ -45,6 +45,20 @@ export default function TaskItem({
   const setIsOpenDeleteModal = useSetAtom(isOpenDeleteModalAtom);
   const setIsOpenEditTaskModal = useSetAtom(isOpenEditTaskModalAtom);
 
+  function handleClick(name: string) {
+    setIsOpenMoreId(false);
+
+    if (name === "Delete") {
+      setIsOpenDeleteModal(true);
+    } else if (name === "Edit") {
+      setIsOpenEditTaskModal(true);
+    } else {
+      return null;
+    }
+
+    return;
+  }
+
   return (
     <div className="relative">
       <div
@@ -92,13 +106,7 @@ export default function TaskItem({
                 <button
                   type="button"
                   className="flex justify-center items-center space-x-2"
-                  onClick={() =>
-                    item.name === "Delete"
-                      ? setIsOpenDeleteModal(true)
-                      : item.name === "Edit"
-                      ? setIsOpenEditTaskModal(true)
-                      : null
-                  }
+                  onClick={() => handleClick(item.name)}
                 >
                   <img src={item.image} alt={item.name} />
                   <span>{item.name}</span>

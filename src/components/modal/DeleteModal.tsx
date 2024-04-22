@@ -17,7 +17,7 @@ export default function DeleteModal() {
           </button>
         </div>
         <div className="mt-6">
-          <p>
+          <p className="text-sm">
             Are you sure want to delete this task? your action can’t be
             reverted.
           </p>
