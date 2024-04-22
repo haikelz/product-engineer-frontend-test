@@ -16,7 +16,7 @@ import {
 } from "~/store";
 
 export default function VersionOne() {
-  const [data] = useAtom(dataAtom);
+  const data = useAtomValue(dataAtom);
   const [isOpenAddNewGroupModal, setIsOpenAddNewGroupModal] = useAtom(
     isOpenAddNewGroupModalAtom
   );
