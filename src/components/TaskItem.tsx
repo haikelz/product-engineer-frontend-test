@@ -2,7 +2,7 @@ import { useAtom } from "jotai";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
 import { DraggableProvided } from "react-beautiful-dnd";
 import { tw } from "../lib/utils/tw";
-import { isOpenMoreAtom } from "../store";
+import { isOpenMoreIdAtom } from "../store";
 
 type TaskItemProps = DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
@@ -13,8 +13,28 @@ type TaskItemProps = DetailedHTMLProps<
   progress: string;
 };
 
-export default function TaskItem({ provided, name, progress }: TaskItemProps) {
-  const [isOpenMore] = useAtom(isOpenMoreAtom);
+const menuList = [
+  {
+    id: 1,
+    name: "Move Right",
+    image: "/images/arrow-right.svg",
+  },
+  {
+    id: 2,
+    name: "Move Left",
+    image: "/images/arrow-left.svg",
+  },
+  { id: 3, name: "Edit", image: "/images/pencil.svg" },
+  { id: 4, name: "Delete", image: "/images/trash.svg" },
+];
+
+export default function TaskItem({
+  id,
+  provided,
+  name,
+  progress,
+}: TaskItemProps) {
+  const [isOpenMoreId, setIsOpenMoreId] = useAtom(isOpenMoreIdAtom);
 
   return (
     <>
@@ -44,18 +64,20 @@ export default function TaskItem({ provided, name, progress }: TaskItemProps) {
               <span className="text-xs text-[#757575]">{progress}</span>
             )}
           </div>
-          <button type="button">
+          <button type="button" onClick={() => setIsOpenMoreId(id as string)}>
             <img src="/images/more.svg" alt="more" />
           </button>
         </div>
       </div>
-      {isOpenMore ? (
-        <div className="fixed top-0 drop-shadow-lg rounded-lg p-4">
-          <ul className="flex flex-col justify-center items-center space-y-5">
-            <li className="flex justify-center items-center w-fit space-x-4">
-              <img src="" alt="move right" />
-              <span>Move Right</span>
-            </li>
+      {isOpenMoreId === id ? (
+        <div className="fixed bg-white top-0 drop-shadow-lg rounded-lg p-4">
+          <ul className="flex flex-col justify-center items-start space-y-5">
+            {menuList.map((item) => (
+              <li className="flex justify-center items-center w-fit">
+                <img src={item.image} alt={item.name} />
+                <span>{item.name}</span>
+              </li>
+            ))}
           </ul>
         </div>
       ) : null}

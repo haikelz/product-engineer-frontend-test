@@ -8,5 +8,9 @@ export default function Home() {
     navigate("/v1");
   }, [navigate]);
 
-  return;
+  return (
+    <div>
+      <h1>Rakamin Product Engineer Test</h1>
+    </div>
+  );
 }

@@ -3,22 +3,23 @@ import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
 import StrictModeDroppable from "../components/StrictModeDroppable";
 import TaskItem from "../components/TaskItem";
 import { tw } from "../lib/utils/tw";
-import { dataAtom } from "../store";
+import {
+  dataAtom,
+  isOpenAddNewGroupModalAtom,
+  isOpenCreateTaskModalAtom,
+  isOpenEditTaskModalAtom,
+} from "../store";
 
 export default function VersionOne() {
-  const [data, setData] = useAtom(dataAtom);
+  const [data] = useAtom(dataAtom);
+  const [isOpenCreateTaskModal, setIsOpenCreateTaskModal] = useAtom(
+    isOpenCreateTaskModalAtom
+  );
+  const [isOpenAddNewGroupModal, setIsOpenAddNewGroupModal] = useAtom(
+    isOpenAddNewGroupModalAtom
+  );
 
-  function handleOnDragEnd(results: DropResult) {
-    if (!results.destination) return;
-
-    const arr = data.filter((item) => item.tasks);
-
-    const items = Array.from(arr);
-    const [reorderedItem] = items.splice(results.source.index, 1);
-    items.splice(results.destination.index, 0, reorderedItem);
-
-    setData(items);
-  }
+  function handleOnDragEnd(results: DropResult) {}
 
   return (
     <>
@@ -29,6 +30,7 @@ export default function VersionOne() {
             <button
               type="button"
               className="py-1.5 px-4 text-xs bg-primary-main drop-shadow-md text-white font-bold rounded-lg"
+              onClick={() => setIsOpenAddNewGroupModal(true)}
             >
               + Add New Group
             </button>
@@ -86,6 +88,7 @@ export default function VersionOne() {
                           >
                             {(provided) => (
                               <TaskItem
+                                id={task.id}
                                 provided={provided}
                                 progress={task.progress}
                                 name={task.name}
@@ -106,6 +109,7 @@ export default function VersionOne() {
               <button
                 type="button"
                 className="flex justify-center items-center space-x-2"
+                onClick={() => setIsOpenCreateTaskModal(true)}
               >
                 <img src="/images/plus.svg" alt="plus" />
                 <span className="text-xs">New Task</span>
@@ -114,6 +118,130 @@ export default function VersionOne() {
           ))}
         </section>
       </main>
+      {isOpenCreateTaskModal ? (
+        <div className="w-full flex justify-center items-center fixed backdrop-blur-lg top-0 min-h-screen">
+          <div className="bg-white drop-shadow-lg w-[420px] p-4 rounded-lg">
+            <div className="w-full flex justify-between items-center">
+              <p className="text-lg font-bold">Create Task</p>
+              <button
+                type="button"
+                onClick={() => setIsOpenCreateTaskModal(false)}
+              >
+                <img src="/images/close.svg" alt="close" />
+              </button>
+            </div>
+            <div className="mt-6">
+              <div className="mb-6 space-y-4">
+                <div className="flex flex-col justify-start items-start">
+                  <label htmlFor="task" className="text-sm font-bold mb-2">
+                    Task Name
+                  </label>
+                  <input
+                    className="px-4 py-2 rounded-lg w-full border-[3px]"
+                    type="text"
+                    name="task"
+                    id=""
+                    placeholder="Type Your Task"
+                  />
+                </div>
+                <div className="flex flex-col justify-start items-start">
+                  <label htmlFor="progress" className="text-sm font-bold mb-2">
+                    Progress
+                  </label>
+                  <input
+                    className="px-4 py-2 rounded-lg w-[143px] border-[3px]"
+                    type="text"
+                    name="progress"
+                    id=""
+                    placeholder="70%"
+                  />
+                </div>
+              </div>
+              <div className="w-full flex justify-end items-center">
+                <div className="flex justify-center items-center w-fit space-x-3">
+                  <button
+                    type="button"
+                    className="rounded-md border border-[#E0E0E0] shadow-md font-bold text-sm px-5 py-2"
+                    onClick={() => setIsOpenCreateTaskModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded-lg bg-primary-main text-sm text-white px-5 py-2 font-bold"
+                    onClick={() => setIsOpenEditTaskModalAtom(true)}
+                  >
+                    Save Task
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+      {isOpenAddNewGroupModal ? (
+        <div className="w-full flex justify-center items-center fixed backdrop-blur-lg top-0 min-h-screen">
+          <div className="bg-white drop-shadow-lg w-[420px] p-4 rounded-lg">
+            <div className="w-full flex justify-between items-center">
+              <p className="text-lg font-bold">Add New Group</p>
+              <button
+                type="button"
+                onClick={() => setIsOpenAddNewGroupModal(false)}
+              >
+                <img src="/images/close.svg" alt="close" />
+              </button>
+            </div>
+            <div className="mt-6">
+              <div className="mb-6 space-y-4">
+                <div className="flex flex-col justify-start items-start">
+                  <label htmlFor="title" className="text-sm font-bold mb-2">
+                    Title
+                  </label>
+                  <input
+                    className="px-4 py-2 rounded-lg w-full border-[3px]"
+                    type="text"
+                    name="title"
+                    id=""
+                    placeholder="Placeholder"
+                  />
+                </div>
+                <div className="flex flex-col justify-start items-start">
+                  <label
+                    htmlFor="description"
+                    className="text-sm font-bold mb-2"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    className="px-4 py-2 rounded-lg w-full border-[3px]"
+                    name="description"
+                    id=""
+                    placeholder="Placeholder"
+                  />
+                </div>
+              </div>
+              <div className="w-full flex justify-end items-center">
+                <div className="flex justify-center items-center w-fit space-x-3">
+                  <button
+                    type="button"
+                    className="rounded-md border border-[#E0E0E0] shadow-md font-bold text-sm px-5 py-2"
+                    onClick={() => setIsOpenAddNewGroupModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded-lg bg-primary-main text-sm text-white px-5 py-2 font-bold"
+                    onClick={() => setIsOpenAddNewGroupModal(true)}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
