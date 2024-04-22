@@ -66,3 +66,4 @@ export const isOpenMoreIdAtom = atom<string>("");
 export const isOpenCreateTaskModalAtom = atom<boolean>(false);
 export const isOpenEditTaskModalAtom = atom<boolean>(false);
 export const isOpenAddNewGroupModalAtom = atom<boolean>(false);
+export const isOpenDeleteModalAtom = atom<boolean>(false);
